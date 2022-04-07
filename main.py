@@ -65,7 +65,7 @@ if today_tuple in birthdays_dict:
         # try to open random letter in the letter_templates
         with open(f"letter_templates/letter_{randint(1, number_of_letters)}.txt") as random_letter:
             letter = random_letter.read()
-    except FileNotFoundError:
+    except (FileNotFoundError, ValueError):
         # if file isn't found (doesn't exist) create a new one
         with open("letter_templates/letter_1.txt", mode="w") as create_letter:
             letter_content = "Dear [NAME],\n\nHappy Birthday!\n\nPatryk"
@@ -76,7 +76,7 @@ if today_tuple in birthdays_dict:
         # then replace the placeholder with person's name
         ready_letter = letter.replace(PLACEHOLDER, birthday_person["name"])
 
-    # establish a SMTP connection and send the email
+    # establish an SMTP connection and send the email
     with smtplib.SMTP(host=HOST) as connection:
         connection.starttls()
         connection.login(user=MY_EMAIL, password=MY_PASSWORD)
